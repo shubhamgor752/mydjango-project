@@ -1,0 +1,99 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+<!-- body -->
+
+<body class="main-layout">
+
+    <div class="brand_color">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="titlepage">
+                        <h2>Sign Up</h2>
+                        {% if msg %}
+                        <b style="color:red;">{{msg}}</b>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- contact -->
+    <div class="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <form class="main_form" method="post" action="{% url 'signup' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class=" col-md-12">
+                                <select class="form-control" name="usertype">
+                                    <option>---Select User Type---</option>
+                                    <option value="user">User</option>
+                                    <option value="seller">Seller</option>
+                                </select>
+                            </div>
+                            <div class=" col-md-12">
+                                <input class="form-control" placeholder="First Name" type="text" name="fname">
+                            </div>
+                            <div class=" col-md-12">
+                                <input class="form-control" placeholder="Last Name" type="text" name="lname">
+                            </div>
+                            <div class=" col-md-12">
+                                <input class="form-control" placeholder="Email" type="text" id="email" name="email">
+                                <span id="email_error"></span>
+                            </div>
+                            <div class=" col-md-12">
+                                <input class="form-control" placeholder="Mobile" type="text" name="mobile">
+                            </div>
+                            <div class="col-md-12">
+                                <textarea class="textarea" placeholder="Address" name="address"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" placeholder="Password" type="password" name="password">
+                            </div>
+                            <div class="col-md-12">
+                                <input class="form-control" placeholder="Confirm Password" type="password" name="cpassword">
+                            </div>
+                            <div class=" col-md-12">
+                                <button class="send">Sign UP</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end contact -->
+    <script>
+        $("#email").change(function(){
+            var email=$(this).val();
+
+            $.ajax({
+                url: '/ajax/validate_email/',
+                data: {
+                  'email': email
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.is_taken) {
+                    document.getElementById("email_error").innerHTML="Email Already Registered";
+                }else{
+                    document.getElementById("email_error").innerHTML="";
+                }
+            }
+        });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}
